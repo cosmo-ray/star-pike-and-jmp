@@ -120,18 +120,12 @@ exit:
 	;; to remove or refacto
 print_hex:
 	mov dx,ax
-	and ax,0xf000
+	mov bx,0xf000
 	mov cl,12
-	call print_hex_gen
-
-	and ax,0x0f00
-	call print_hex_gen
-
-	and ax,0x00f0
-	call print_hex_gen
-
-	and ax,0x000f
-	call print_hex_gen
+	call print_hex_gen	;0xf000
+	call print_hex_gen 	;0x0f00
+	call print_hex_gen	;0x00f0
+	call print_hex_gen	;0x000f
 	ret
 
 add_ascii:
@@ -145,14 +139,16 @@ add_a_hex:
 	ret
 
 print_hex_gen:
+	and ax,bx
 	jz phg1
 	shr ax,cl
 phg1:
 	call add_ascii
 	or ax,0x0f00
 	stosw
-	sub cx,4
+	sub cl,4
 	mov ax,dx
+	shr bx,4
 	ret
 
 guy_jmp:
