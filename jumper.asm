@@ -72,7 +72,7 @@ floor:
 	mov di,3838
 	add di,cx
 	mov word [di],0xff00
-	sub cx,1
+	dec cx
 	loop floor
 
 	add di,[pike]
@@ -121,36 +121,17 @@ exit:
 print_hex:
 	mov dx,ax
 	and ax,0xf000
-	jz px_3
-	shr ax,12
-px_3:
-	call add_ascii
-	or ax,0x0f00
-	mov [di],ax
-	mov ax,dx
-	;; 0x0X00
+	mov cl,12
+	call print_hex_gen
+
 	and ax,0x0f00
-	jz px_2
-	shr ax,8
-px_2:
-	call add_ascii
-	or ax,0x0f00
-	mov [di+2],ax
-	mov ax,dx
-	;; 0x00X0
+	call print_hex_gen
+
 	and ax,0x00f0
-	jz px_1
-	shr ax,4
-px_1:
-	call add_ascii
-	or ax,0x0f00
-	mov [di+4],ax
-	mov ax,dx
-px_0:
+	call print_hex_gen
+
 	and ax,0x000f
-	call add_ascii
-	or ax,0x0f00
-	mov [di+6],ax
+	call print_hex_gen
 	ret
 
 add_ascii:
@@ -161,6 +142,16 @@ add_ascii:
 add_a_hex:
 	sub ax,10
 	add ax,'A'
+	ret
+
+print_hex_gen:
+	jz phg1
+	shr ax,cl
+phg1:
+	call add_ascii
+	or ax,0x0f00
+	stosw
+	sub cx,4
 	mov ax,dx
 	ret
 
