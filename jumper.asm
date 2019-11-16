@@ -22,7 +22,16 @@ score:	equ 0x0fa8
 main_loop:
 	inc word [rand]
 
-	call wait_frm
+	;; wait frm
+	xor ah,ah
+	int 0x1a
+frm_wait_loop:
+	push dx
+	xor ah,ah
+	int 0x1a
+	pop bx
+	cmp bx,dx
+	jz frm_wait_loop
 
 	;; get input
 	mov ah,0x01
@@ -96,20 +105,6 @@ key_pressed:
 	cmp al,' '
 	jz guy_jmp
 	jmp print_map
-
-wait_frm:
-	push cx
-	mov ah,0x00
-	int 0x1a
-fb14:
-	push dx
-	mov ah,0x00
-	int 0x1a
-	pop bx
-	cmp bx,dx
-	jz fb14
-	pop cx
-	ret
 
 reset_pike:
 	mov word [pike],154
