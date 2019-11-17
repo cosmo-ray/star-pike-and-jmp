@@ -70,10 +70,12 @@ frm_wait_loop:
 	mov di,[pj_pos]
 	mov word [di+480],0x0000
 	mov word [di+322],0x0000
+	mov word [di+318],0x0000
 
 	jmp jmp_handle_out
 jmp_handle_down:		;let s fall
 	mov di,[pj_pos]
+	mov word [di+158],0x0000
 	mov word [di+162],0x0000
 	mov word [di],0x0000
 	add word [pj_pos],160
@@ -113,7 +115,8 @@ print_guy:
 	mov di,[pj_pos]
 	mov word [di],0x0f02	; head
 	mov word [di+160],0xb000 ; body
-	mov word [di+162],0x0f5c ; body
+	mov word [di+162],0x0f5c ; right arm
+	mov word [di+158],0x0f2f ; left arm
 	mov word [di+320],0x0213 ; legs
 
 	;; print floor
