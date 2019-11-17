@@ -69,10 +69,12 @@ frm_wait_loop:
 	sub word [pj_pos],160
 	mov di,[pj_pos]
 	mov word [di+480],0x0000
+	mov word [di+322],0x0000
 
 	jmp jmp_handle_out
 jmp_handle_down:		;let s fall
 	mov di,[pj_pos]
+	mov word [di+162],0x0000
 	mov word [di],0x0000
 	add word [pj_pos],160
 jmp_handle_out:
@@ -111,6 +113,7 @@ print_guy:
 	mov di,[pj_pos]
 	mov word [di],0x0f02	; head
 	mov word [di+160],0xb000 ; body
+	mov word [di+162],0x0f5c ; body
 	mov word [di+320],0x0213 ; legs
 
 	;; print floor
@@ -124,9 +127,10 @@ floor:
 
 	add di,[pike]
 	mov ax,0x0c1e
+	stosw			; pike are 3 case long
 	stosw
 	stosw
-	stosw
+
 	mov word [220],0x0604	; print star
 	mov word [670],0x0604	; print star
 	mov word [312],0x0604	; print star
@@ -160,10 +164,10 @@ reset_pike:
 	mov word [pike],154
 	jmp main_loop
 die:
-	mov word [0],0x0f64
-	mov word [2],0x0f65
-	mov word [4],0x0f61
-	mov word [6],0x0f64
+	mov word [0],0x0f64	; 'd'
+	mov word [2],0x0f65	; 'e'
+	mov word [4],0x0f61	; 'a'
+	mov word [6],0x0f64	; 'd'
 exit:
 	int 0x20
 
