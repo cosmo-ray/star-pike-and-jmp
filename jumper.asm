@@ -21,6 +21,7 @@ rand:	equ 0x0fa2
 pike:	equ 0x0fa4
 jmp_pow:	equ 0x0fa6
 score:	equ 0x0fa8
+can_border:	equ 0x0faa
 
 	mov ax,0x0002 		; set 80x25 txt mode
 	int 0x10
@@ -34,11 +35,15 @@ score:	equ 0x0fa8
 	mov di,jmp_pow
 	stosw		; jmp_pow
 	stosw		; score
+	stosw		; can_border
 	jmp reset_pike
 main_loop:
 	inc word [rand]
+	cmp word [can_border],0x00
+	jz wait_frm
+	dec word [can_border]
 
-	;; wait frm
+wait_frm:
 	xor ah,ah
 	int 0x1a
 frm_wait_loop:
@@ -58,8 +63,8 @@ frm_wait_loop:
 	mov cx,[jmp_pow]
 
 	jcxz print_map		; jmp_pow is 0
-	cmp cx,4
-	jc jmp_handle_down	; cx < 3
+	cmp cx,5
+	jc jmp_handle_down	; cx < 4
 
 	sub word [pj_pos],160
 	mov di,[pj_pos]
@@ -97,6 +102,8 @@ border_next0:
 
 try_add_border:
 	test word [rand],0x1f
+	jnz print_guy
+	cmp word [can_border],0x00
 	jnz print_guy
 	mov word [di],0xffb0
 
@@ -149,6 +156,7 @@ key_pressed:
 	jmp print_map
 
 reset_pike:
+	mov word [can_border],9
 	mov word [pike],154
 	jmp main_loop
 die:
@@ -197,7 +205,7 @@ guy_jmp:
 	cmp word [jmp_pow],0
 	jnz print_map
 	inc word [score]
-	mov word [jmp_pow],6
+	mov word [jmp_pow],8
 	jmp print_map
 
 	;; boot sector stuff
