@@ -55,7 +55,7 @@ jmp_handle_down:		;let's fall
 	mov word [di],0x0000
 	add word [pj_pos],160
 jmp_handle_out:
-	sub word [jmp_pow],1
+	dec word [jmp_pow]
 
 print_map:
 	cld
@@ -64,7 +64,31 @@ print_map:
 	mov di,100
 	call print_hex
 
-	call print_guy
+	mov cx,160
+border_next0:
+	sub cx,2
+	jcxz try_add_border
+	mov di,3838
+	sub di,cx
+	cmp word [di],0xffb0
+	jnz border_next0
+
+	mov word [di],0x0000
+	cmp cx,158
+	jz try_add_border
+	mov word [di - 2],0xffb0
+	jmp border_next0
+
+try_add_border:
+	test word [rand],0x1f
+	jnz print_guy
+	mov word [di],0xffb0
+
+print_guy:
+	mov di,[pj_pos]
+	mov word [di],0x0f02	; head
+	mov word [di+160],0xb000 ; body
+	mov word [di+320],0x0213 ; legs
 
 	;; print floor
 	mov cx,160
@@ -94,6 +118,8 @@ floor:
 	mov di,[pj_pos]
 	cmp byte [di + 480],0x00
 	jnz die
+	cmp byte [di + 323],0xff
+	jz die
 	jmp main_loop
 
 key_pressed:
@@ -117,7 +143,9 @@ die:
 exit:
 	int 0x20
 
-	;; to remove or refacto
+	;; unsafe func
+	;; need to preotect cx,dx
+	;; but I need place more
 print_hex:
 	mov dx,ax
 	mov bx,0xf000
@@ -128,22 +156,19 @@ print_hex:
 	call print_hex_gen	;0x000f
 	ret
 
-add_ascii:
-	cmp ax,10
-	jnc add_a_hex
-	add ax,'0'
-	ret
-add_a_hex:
-	sub ax,10
-	add ax,'A'
-	ret
-
 print_hex_gen:
 	and ax,bx
 	jz phg1
 	shr ax,cl
 phg1:
-	call add_ascii
+	cmp ax,10
+	jnc add_a_hex
+	add ax,'0'
+	jmp phg2
+add_a_hex:
+	sub ax,10
+	add ax,'A'
+phg2:
 	or ax,0x0f00
 	stosw
 	sub cl,4
@@ -155,16 +180,9 @@ guy_jmp:
 	mov di,[pj_pos]
 	cmp word [jmp_pow],0
 	jnz print_map
-	add word [score],1
+	inc word [score]
 	mov word [jmp_pow],6
 	jmp print_map
-
-print_guy:
-	mov di,[pj_pos]
-	mov word [di],0x0f02
-	mov word [di+160],0x0bf2
-	mov word [di+320],0x0213
-	ret
 
 	;; boot sector stuff
 	times 510-($-$$) db 0
