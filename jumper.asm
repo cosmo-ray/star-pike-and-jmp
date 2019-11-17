@@ -66,7 +66,7 @@ frm_wait_loop:
 	mov word [di+480],0x0000
 
 	jmp jmp_handle_out
-jmp_handle_down:		;let's fall
+jmp_handle_down:		;let s fall
 	mov di,[pj_pos]
 	mov word [di],0x0000
 	add word [pj_pos],160
