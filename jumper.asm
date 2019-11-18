@@ -163,7 +163,7 @@ floor:
 	jmp main_loop
 
 key_pressed:
-	mov ah,0x00
+	xor ah,ah
 	int 0x16
 	add [rand],al
 	cmp al,0x1b
@@ -197,17 +197,15 @@ print_hex:
 
 print_hex_gen:
 	and ax,bx
-	jz phg1
 	shr ax,cl
-phg1:
 	cmp ax,10
 	jnc add_a_hex
 	add ax,'0'
-	jmp phg2
+	jmp phg0
 add_a_hex:
 	sub ax,10
 	add ax,'A'
-phg2:
+phg0:
 	or ax,0x0f00
 	stosw
 	sub cl,4
