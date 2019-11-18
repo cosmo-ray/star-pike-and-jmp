@@ -43,6 +43,9 @@ main_loop:
 	jz wait_frm
 	dec word [can_border]
 
+	in al,(0x40)		; try better rand
+	add word [rand],ax
+
 wait_frm:
 	xor ah,ah
 	int 0x1a
@@ -100,7 +103,7 @@ border_next0:
 
 	mov word [di],0x0000
 	cmp cx,158
-	jz try_add_border
+	jz border_next0
 	mov word [di - 2],0xffb0
 	jmp border_next0
 
@@ -158,9 +161,7 @@ key_pressed:
 	add [rand],al
 	cmp al,0x1b
 	jz exit
-	cmp al,' '
-	jz guy_jmp
-	jmp print_map
+	jmp guy_jmp
 
 reset_pike:
 	mov word [can_border],9
