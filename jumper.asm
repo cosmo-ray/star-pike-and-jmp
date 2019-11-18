@@ -29,9 +29,16 @@ can_border:	equ 0x0faa
 	mov ax,0xb800		; video segment pos
 	mov ds,ax
 	mov es,ax
-	;; variables init
+init:
 	mov word [pj_pos],3360 + 10	; 22 * 160 + 4
 	xor ax,ax
+	;; clean "dead in bios mode"
+	xor di,di
+	stosw
+	stosw
+	stosw
+	stosw
+
 	mov di,jmp_pow
 	stosw		; jmp_pow
 	stosw		; score
@@ -207,7 +214,6 @@ phg2:
 	mov ax,dx
 	shr bx,4
 	ret
-
 guy_jmp:
 	mov di,[pj_pos]
 	cmp word [jmp_pow],0
