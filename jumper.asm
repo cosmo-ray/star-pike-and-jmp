@@ -117,6 +117,8 @@ border_next0:
 try_add_border:
 	test word [rand],0x1f
 	jnz print_guy
+	cmp word [pike],10
+	jc print_guy
 	cmp word [can_border],0x00
 	jnz print_guy
 	mov word [di],0xffb0
