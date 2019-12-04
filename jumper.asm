@@ -73,21 +73,22 @@ frm_wait_loop:
 	mov cx,[jmp_pow]
 
 	jcxz print_map		; jmp_pow is 0
+	xor ax,ax
 	cmp cx,5
 	jc jmp_handle_down	; cx < 4
 
 	sub word [pj_pos],160
 	mov di,[pj_pos]
-	mov word [di+480],0x0000
-	mov word [di+322],0x0000
-	mov word [di+318],0x0000
+	mov word [di+480],ax
+	mov word [di+322],ax
+	mov word [di+318],ax
 
 	jmp jmp_handle_out
 jmp_handle_down:		;let s fall
 	mov di,[pj_pos]
-	mov word [di+158],0x0000
-	mov word [di+162],0x0000
-	mov word [di],0x0000
+	mov word [di+158],ax
+	mov word [di+162],ax
+	mov word [di],ax
 	add word [pj_pos],160
 jmp_handle_out:
 	dec word [jmp_pow]
@@ -146,13 +147,14 @@ floor:
 	stosw
 	stosw
 
-	mov word [220],0x0604	; print star
-	mov word [670],0x0604	; print star
-	mov word [312],0x0604	; print star
-	mov word [394],0x0604	; print star
-	mov word [300],0x0604	; print star
-	mov word [404],0x0604	; print star
-	mov word [764],0x0604	; print star
+	mov ax,0x0604
+	mov word [220],ax	; print star
+	mov word [670],ax	; print star
+	mov word [312],ax	; print star
+	mov word [394],ax	; print star
+	mov word [300],ax	; print star
+	mov word [404],ax	; print star
+	mov word [764],ax	; print star
 	sub word [pike],2
 	;; must reset if cary
 	jc reset_pike
