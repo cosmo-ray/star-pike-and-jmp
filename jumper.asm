@@ -30,7 +30,7 @@ can_border:	equ 0x0faa
 	mov ds,ax
 	mov es,ax
 init:
-	mov word [pj_pos],3360 + 10	; 22 * 160 + 4
+	mov word [pj_pos],21 * 160 + 10
 	xor ax,ax
 	;; clean "dead in bios mode"
 	xor di,di
@@ -73,7 +73,8 @@ frm_wait_loop:
 	mov cx,[jmp_pow]
 
 	jcxz print_map		; jmp_pow is 0
-	xor ax,ax
+
+	xor ax,ax		; ax to 0
 	cmp cx,5
 	jc jmp_handle_down	; cx < 4
 
@@ -118,7 +119,7 @@ border_next0:
 try_add_border:
 	test word [rand],0x1f
 	jnz print_guy
-	cmp word [pike],10
+	cmp word [pike],12	; if pike < 12 don't border
 	jc print_guy
 	cmp word [can_border],0x00
 	jnz print_guy
