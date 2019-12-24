@@ -38,7 +38,6 @@ init:
 	stosw
 	stosw
 	stosw
-
 	mov di,jmp_pow
 	stosw		; jmp_pow
 	stosw		; score
@@ -56,6 +55,7 @@ main_loop:
 wait_frm:
 	xor ah,ah
 	int 0x1a
+	;; YIRL_REFRESH
 frm_wait_loop:
 	push dx
 	xor ah,ah
@@ -100,7 +100,6 @@ print_map:
 	mov ax,[score]
 	mov di,100
 	call print_hex
-
 	mov cx,160
 border_next0:
 	sub cx,2
@@ -109,7 +108,6 @@ border_next0:
 	sub di,cx
 	cmp word [di],0xffb0
 	jnz border_next0
-
 	mov word [di],0x0000
 	cmp cx,158
 	jz border_next0
@@ -123,7 +121,7 @@ try_add_border:
 	jc print_guy
 	cmp word [can_border],0x00
 	jnz print_guy
-	mov word [di],0xffb0
+	mov word [di],0xffb0 	; create broder
 
 print_guy:
 	mov di,[pj_pos]
@@ -148,7 +146,7 @@ floor:
 	stosw
 	stosw
 
-	mov ax,0x0604
+	mov ax,0x062A
 	mov word [220],ax	; print star
 	mov word [670],ax	; print star
 	mov word [312],ax	; print star
@@ -157,6 +155,7 @@ floor:
 	mov word [404],ax	; print star
 	mov word [764],ax	; print star
 	sub word [pike],2
+
 	;; must reset if cary
 	jc reset_pike
 
@@ -217,6 +216,7 @@ phg0:
 	mov ax,dx
 	shr bx,4
 	ret
+
 guy_jmp:
 	mov di,[pj_pos]
 	cmp word [jmp_pow],0

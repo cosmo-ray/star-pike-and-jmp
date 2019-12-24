@@ -1,0 +1,12 @@
+{
+    "name" : "star-pike-jmp",
+    "starting widget" : "jumper",
+    "window size" : [800, 600],
+    "pre-load" : [
+	{ "path" : "YIRL_MODULES_PATH/8086-emu/", "type" : "module" }
+    ],
+    "jumper": {
+	"<type>" : "8086",
+	"asm": "jumper.asm"
+    }
+}
