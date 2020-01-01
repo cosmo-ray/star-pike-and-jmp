@@ -5,8 +5,10 @@
     "pre-load" : [
 	{ "path" : "YIRL_MODULES_PATH/8086-emu/", "type" : "module" }
     ],
+    "make-prototype": "jumper",
     "jumper": {
 	"<type>" : "8086",
-	"asm": "jumper.asm"
+	"asm": "./modules/star-pike-and-jmp/jumper.asm"
+	//"asm": "./jumper.asm"
     }
 }

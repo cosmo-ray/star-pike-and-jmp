@@ -42,6 +42,7 @@ init:
 	stosw		; jmp_pow
 	stosw		; score
 	stosw		; can_border
+
 	jmp reset_pike
 main_loop:
 	inc word [rand]
